@@ -1,5 +1,4 @@
 "use strict";
-const { google } = require('googleapis');
 
 const s2sMS = require('star2star-js-ms-sdk');
 
