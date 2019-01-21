@@ -342,7 +342,7 @@ const getConfigTab = (data, errors, callback) => {
             buttonType="primaryGreen"
             cbClick={
               (event) => {
-                console.log('button clicked');
+                console.log('button clicked', event);
                 callback && callback("new-oauth2", { "scopes": ['profile', 'email', "https://www.googleapis.com/auth/drive.readonly"], "name": 'New Demo Name', "provider": "google", "description": "does something" });
               }}
           />
@@ -489,8 +489,8 @@ const isValid = (data, otherNodes) => {
   return { "isValid": bReturn, "messages": msgReturn };
 };
 
-const publish = (flow, nodeData) => {
-  return new Promise((resolve, reject) => {
+const publish = (/* flow, nodeData */) => {
+  return new Promise((resolve) => {
     //custom code here 
     // if (1 === 2) {
     //   reject();
@@ -499,8 +499,8 @@ const publish = (flow, nodeData) => {
   });
 };
 
-const unPublish = (flow, nodeData) => {
-  return new Promise((resolve, reject) => {
+const unPublish = (/* flow, nodeData */) => {
+  return new Promise((resolve) => {
     //custom code here 
     // if ('x' === "y") {
     //   reject();
@@ -840,10 +840,14 @@ class FormSection extends React.Component {
 
   static propTypes = {
     styledClass: PropTypes.func, // styled component class defined immediately above
+    children: PropTypes.children, 
+    hideDivider: PropTypes.bool,
+    sectionHeader: PropTypes.string, 
+    sectionSubHeader: PropTypes.string,
+    sectionDescription: PropTypes.string
   };
 
   static defaultProps = {
-
   };
 
   render() {
