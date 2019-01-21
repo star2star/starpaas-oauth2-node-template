@@ -1,0 +1,27 @@
+{
+  "name": "oauth2example",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf package-lock.json && rimraf dist/* && rimraf node_modules && npm install",
+    "test": "node  test.js",
+    "babel": "./node_modules/.bin/babel --config-file ./babel.config.js src --out-dir ./",
+    "build": "npm run babel && zip -r dist/globalgetoauth2token.zip ./"
+  },
+  "keywords": [],
+  "author": "James Schimmoeller",
+  "license": "ISC",
+  "dependencies": {
+    "googleapis": "^36.0.0",
+    "request-promise": "4.2.2",
+    "star2star-js-ms-sdk": "^2.2.36"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.2.3",
+    "@babel/core": "7.2.2",
+    "@babel/node": "7.2.2",
+    "@babel/preset-env": "7.2.3",
+    "rimraf": "2.6.3"
+  }
+}

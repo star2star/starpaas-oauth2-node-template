@@ -1,0 +1,46 @@
+{
+  "name": "starpaas-oauth2-node-template",
+  "version": "1.0.0",
+  "description": "this is an oauth2 node template project",
+  "main": "src/index.js",
+  "scripts": {
+    "storybook": "start-storybook -p 6006 -c ./src/test/storybook"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/star2star/starpaas-oauth2-node-template.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "konva": "2.5.1",
+    "object-merge": "^2.5.1",
+    "prop-types": "15.6.2",
+    "react-dom": "16.6.3",
+    "react-intl": "2.7.2",
+    "s2s-app-service": "4.5.61",
+    "s2s-button": "^3.0.6",
+    "s2s-input": "^2.0.1",
+    "s2s-node-utilities": "0.0.1",
+    "s2s-select": "^2.0.3",
+    "s2s-svg-icons": "^2.3.12",
+    "s2s-themes": "^4.0.0",
+    "styled-components": "4.1.1"
+  },
+  "devDependencies": {
+    "@babel/core": "7.1.6",
+    "@storybook/addon-actions": "4.0.7",
+    "@storybook/addon-links": "4.0.7",
+    "@storybook/addons": "4.0.7",
+    "@storybook/react": "4.0.7",
+    "babel-loader": "8.0.4",
+    "react": "16.6.3",
+    "react-konva": "^16.6.31",
+    "storybook": "1.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/star2star/starpaas-oauth2-node-template/issues"
+  },
+  "homepage": "https://github.com/star2star/starpaas-oauth2-node-template#readme"
+}

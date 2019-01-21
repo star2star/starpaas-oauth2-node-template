@@ -1,0 +1,12 @@
+node_modules/**
+**/node_modules
+**/node_modules/**
+**/coverage/
+.DS_Store
+**/dist
+npm-debug.log
+**/*.zip
+**/package-lock.json
+.vscode
+**/envConfig.json
+**/.cache
