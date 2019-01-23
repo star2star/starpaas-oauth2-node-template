@@ -342,7 +342,7 @@ const getConfigTab = (data, errors, callback) => {
             buttonType="primaryGreen"
             cbClick={
               (event) => {
-                console.log('button clicked', event);
+                //show dialag first 
                 callback && callback("new-oauth2", { "scopes": ['profile', 'email', "https://www.googleapis.com/auth/drive.readonly"], "name": 'New Demo Name', "provider": "google", "description": "does something" });
               }}
           />
@@ -482,7 +482,8 @@ const isValid = (data, otherNodes) => {
     bReturn = false;
     msgReturn = msgReturn.concat({ "field": "timeout", "displayTitle": "Timeout", "message": `timeout time is invalid` });
   }
-  if (!data.oAuth2CredsUUID || !data.oAuth2CredsUUID.length < 5) {
+  
+  if (!data.oAuth2CredsUUID || data.oAuth2CredsUUID.length < 5) {
     bReturn = false;
     msgReturn = msgReturn.concat({ "field": "oAuth2CredsUUID", "displayTitle": "oAuth Credentials", "message": `missing or invalid  oAuth Credentials` });
   }
@@ -840,9 +841,12 @@ class FormSection extends React.Component {
 
   static propTypes = {
     styledClass: PropTypes.func, // styled component class defined immediately above
-    children: PropTypes.children, 
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node
+    ]),
     hideDivider: PropTypes.bool,
-    sectionHeader: PropTypes.string, 
+    sectionHeader: PropTypes.string,
     sectionSubHeader: PropTypes.string,
     sectionDescription: PropTypes.string
   };
