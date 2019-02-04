@@ -15,11 +15,11 @@ async function main(params) {
     // TODO update this for production
     s2sMS.setMsHost("https://cpaas.star2starglobal.net");
 
-    if (!params.hasOwnProperty("access_token") || !params.hasOwnProperty("oauth2_uuid")) {
-      throw Error("accss_token or oauth2_uuid missing");
+    if (!params.hasOwnProperty("token") || !params.hasOwnProperty("oauth2_uuid")) {
+      throw Error("token or oauth2_uuid missing");
     }
 
-    const oauth2Obj = await s2sMS.Lambda.invokeLambda(params.access_token, "globalgetoauth2token", {'access_token': params.access_token, 'oauth2_uuid': params.oauth2_uuid });
+    const oauth2Obj = await s2sMS.Lambda.invokeLambda(params.token, "globalgetoauth2token", {'access_token': params.token, 'oauth2_uuid': params.oauth2_uuid });
     const requestOptions = {
       method: "GET",
       uri: "https://www.googleapis.com/drive/v2/files/",
