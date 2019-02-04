@@ -1,6 +1,6 @@
 {
   "name": "starpaas-oauth2-node-template",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "this is an oauth2 node template project",
   "main": "src/index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "prop-types": "15.6.2",
     "react-dom": "16.6.3",
     "react-intl": "2.7.2",
-    "s2s-app-service": "4.5.61",
+    "s2s-app-service": "4.5.73",
     "s2s-button": "^3.0.6",
     "s2s-input": "^2.0.1",
     "s2s-node-utilities": "0.0.1",

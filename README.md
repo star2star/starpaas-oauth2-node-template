@@ -31,7 +31,9 @@ npm run storybook
 
 ## History
 
-#### 02/04/2019 - v1.1.0 - added needsToken 
+#### 02/04/2019 - v1.1.0 
+* added needsToken 
+
 #### 01/21/2019 - v1.0.0
 
 * initial checkin 
