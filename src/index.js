@@ -19,6 +19,9 @@ const category = "activity";
 
 const MAX_TIMEOUT = 300000;
 
+// does this node need to have a token .... defaults to true 
+const NEEDS_TOKEN = true;
+
 const StyledButton = styled(Button)`
   text-transform : uppercase;
 `;
@@ -510,6 +513,10 @@ const unPublish = (/* flow, nodeData */) => {
   });
 };
 
+const needsToken = () =>{
+  return NEEDS_TOKEN;
+};
+
 
 export default {
   "generateSampleData": (/*nodeData, globalData*/) => {
@@ -527,6 +534,8 @@ export default {
   "nodeInfo": nodeInfo,
 
   "isValid": isValid,
+
+  "needsToken": needsToken, 
 
   "generateWorkflow": (data) => {
     let TransitionCounter = 0;
