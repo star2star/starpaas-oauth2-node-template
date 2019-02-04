@@ -34,10 +34,7 @@ async function main(params) {
     return ({ status: "completed", message: "", data: googleResponse});
   } catch (error) {
     console.log('errro', error);
-    return Promise.reject({
-      "status": error.hasOwnProperty("statusCode") ? error.statusCode : 400,
-      "message": error.hasOwnProperty("message") ? error.message : error
-    });
+    return Promise.reject(error.toString());
   }
 }
 
