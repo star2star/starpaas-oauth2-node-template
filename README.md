@@ -31,6 +31,12 @@ npm run storybook
 
 ## History
 
+#### 02/07/2019 - v1.1.1
+* isDisabled for all inputs 
+* internationalization 
+* isPublishedApplication disabling 
+* published and unpublished are optional so commented out ... with comment 
+
 #### 02/04/2019 - v1.1.0 
 * added needsToken 
 

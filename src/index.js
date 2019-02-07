@@ -19,7 +19,6 @@ const category = "activity";
 
 const MAX_TIMEOUT = 300000;
 
-// does this node need to have a token .... defaults to true 
 const NEEDS_TOKEN = true;
 
 const StyledButton = styled(Button)`
@@ -279,7 +278,7 @@ const renderErrorArea = (compValid, svg, node, nodeAction, showErrorDetails) => 
   }
 };
 
-const getConfigTab = (data, errors, callback) => {
+const getConfigTab = (data, errors, callback, isAppPublished) => {
   return () => {
     // render jsx here 
     return (
@@ -290,6 +289,7 @@ const getConfigTab = (data, errors, callback) => {
           sectionDescription={Utilities.getInstance().getIntlMessage('END-NODE-FORM-NODE-INFORMATION-DESCRIPTION', "Basic node information")}
         >
           <StyledInput
+            isDisabled={isAppPublished}
             inputLabel={Utilities.getInstance().getIntlMessage('END-NODE-FORM-DISPLAY-NAME-LABEL', "Display Name")}
             inputHint={Utilities.getInstance().getIntlMessage('END-NODE-FORM-DISPLAY-NAME-HINT', "This name will display on the node")}
             inputType={"text"}
@@ -303,6 +303,7 @@ const getConfigTab = (data, errors, callback) => {
             hasError={errors && errors.hasOwnProperty('name')}
           />
           <StyledInput
+            isDisabled={isAppPublished}
             inputLabel={Utilities.getInstance().getIntlMessage('END-NODE-FORM-NOTE-LABEL', "Note")}
             inputHint={Utilities.getInstance().getIntlMessage('END-NODE-FORM-NOTE-HINT', "Enter in a note for this node.")}
             placeholder={Utilities.getInstance().getIntlMessage('END-NODE-FORM-NOTE-PLACEHOLDER', "Enter a note...")}
@@ -322,6 +323,7 @@ const getConfigTab = (data, errors, callback) => {
           sectionDescription={Utilities.getInstance().getIntlMessage('OAUTH-EXAMPLE-NODE-DESCRIPTION', "Some oAuth Description")}
         >
           <StyledSelect
+            isDisabled={isAppPublished}
             //selectLabel={""}
             selectedItem={data.oAuth2CredsUUID}
             property="value"
@@ -338,13 +340,14 @@ const getConfigTab = (data, errors, callback) => {
             hasError={errors && errors.hasOwnProperty('oAuth2CredsUUID')}
           />
           <StyledButton
+            isDisabled={isAppPublished}
             className="NewOauth2Button"
             ariaLabel="New OAuth2"
             buttonLabel="New OAuth2"
             buttonSize="large"
             buttonType="primaryGreen"
             cbClick={
-              (event) => {
+              () => {
                 //show dialag first 
                 callback && callback("new-oauth2", { "scopes": ['profile', 'email', "https://www.googleapis.com/auth/drive.readonly"], "name": 'New Demo Name', "provider": "google", "description": "does something" });
               }}
@@ -358,6 +361,7 @@ const getConfigTab = (data, errors, callback) => {
           sectionDescription={Utilities.getInstance().getIntlMessage('SEND-SMS-NODE-FORM-CONFIGURE-DATA-DESCRIPTION', "Specify the data source name for the node.")}
         >
           <StyledInput
+            isDisabled={isAppPublished}
             inputLabel={Utilities.getInstance().getIntlMessage('SEND-SMS-NODE-FORM-NODE-OUTPUT-TARGET-LABEL', "Output target")}
             placeholder={Utilities.getInstance().getIntlMessage('SEND-SMS-NODE-FORM-NODE-OUTPUT-TARGET-PLACEHOLDER', "Select your response location...")}
             value={data.resultPath}
@@ -374,7 +378,7 @@ const getConfigTab = (data, errors, callback) => {
   };
 };
 
-const getOutputTab = (data, errors, callback) => {
+const getOutputTab = (data, errors, callback, isAppPublished) => {
   return () => {
     // render jsx here 
     return (
@@ -388,6 +392,7 @@ const getOutputTab = (data, errors, callback) => {
 
           <Label>{Utilities.getInstance().getIntlMessage('SEND-SMS-NODE-FORM-SUCCESS-DESTINATION-LABEL', "Success Connection")}</Label>
           <StyledSelect
+            isDisabled={isAppPublished}
             //sselectLabel={"Next"}
             className="ttttt"
             selectedItem={data.nextState}
@@ -408,6 +413,7 @@ const getOutputTab = (data, errors, callback) => {
 
           <Label>{Utilities.getInstance().getIntlMessage('SEND-SMS-NODE-FORM-ERROR-DESTINATION-LABEL', "Error Connection")}</Label>
           <StyledSelect
+            isDisabled={isAppPublished}
             selectedItem={data.onError}
             property="value"
             autoFocus={false}
@@ -424,6 +430,7 @@ const getOutputTab = (data, errors, callback) => {
           />
           <TimeoutArea>
             <TimeoutInput
+              isDisabled={isAppPublished}
               inputLabel={Utilities.getInstance().getIntlMessage('SEND-SMS-NODE-FORM-TIMEOUT-LABEL', "Timeout")}
               placeholder={Utilities.getInstance().getIntlMessage('SEND-SMS-NODE-FORM-TIMEOUT-PLACEHOLDER', "Default: 2000")}
               value={data.timeout + ""} //integer needed string
@@ -438,6 +445,7 @@ const getOutputTab = (data, errors, callback) => {
               selectLabel={Utilities.getInstance().getIntlMessage('SEND-SMS-NODE-FORM-TIMEOUT-DESTINATION-LABEL', "Timeout Connection")}
               selectedItem={data.onTimeout}
               property="value"
+              isDisabled={isAppPublished}
               autoFocus={false}
               cbOnValueChange={(source) => {
                 //console.log('xxxxxx', source);
@@ -464,12 +472,22 @@ const isValid = (data, otherNodes) => {
   let msgReturn = [];
   if (!data.name || data.name.length < 1) {
     bReturn = false;
-    msgReturn = msgReturn.concat({ "field": "name", "displayTitle": "Name", "message": `missing name` });
+    msgReturn = msgReturn.concat({
+      "field": "name",
+      "displayTitle": `${Utilities.getInstance().getIntlMessage("NODE-VALIDATION-DISPLAY-TITLE-NAME", "Name")}`,
+      "message": `${Utilities.getInstance().getIntlMessage("NODE-VALIDATION-MESSAGE-MISSING-NAME", "Missing name")}`
+    });
+
   }
   //nextState
   if (!data.nextState || data.nextState.length < 1) {
     bReturn = false;
-    msgReturn = msgReturn.concat({ "field": "nextState", "displayTitle": "Success Connection", "message": `missing` });
+    msgReturn = msgReturn.concat({
+      "field": "nextState",
+      "displayTitle": `${Utilities.getInstance().getIntlMessage("NODE-VALIDATION-DISPLAY-TITLE-SUCCESS-CONNECTION", "Success Connection")}`,
+      "message": `${Utilities.getInstance().getIntlMessage("NODE-VALIDATION-MESSAGE-MISSING-SUCCESS-CONNECTION", "Missing success connection")}`
+    });
+
   } else {
     // validate whenTrue name is in otherNodes
     const foundNodes = otherNodes.filter((n) => {
@@ -477,43 +495,58 @@ const isValid = (data, otherNodes) => {
     });
     if (foundNodes.length < 1) {
       bReturn = false;
-      msgReturn = msgReturn.concat({ "field": "nextState", "displayTitle": "Success Connection", "message": `Success Connection is invalid` });
+      msgReturn = msgReturn.concat({
+        "field": "nextState",
+        "displayTitle": `${Utilities.getInstance().getIntlMessage("NODE-VALIDATION-DISPLAY-TITLE-SUCCESS-CONNECTION", "Success Connection")}`,
+        "message": `${Utilities.getInstance().getIntlMessage("NODE-VALIDATION-MESSAGE-INVALID-SUCCESS-CONNECTION", "Invalid success connection")}`
+      });
+
     }
   }
   // console.log('dddddd', data);
   if (!data.timeout || !data.timeout.match(/^\d+$/g) || data.timeout < 0 || data.timeout > MAX_TIMEOUT) {
     bReturn = false;
-    msgReturn = msgReturn.concat({ "field": "timeout", "displayTitle": "Timeout", "message": `timeout time is invalid` });
+    msgReturn = msgReturn.concat({
+      "field": "timeout",
+      "displayTitle": `${Utilities.getInstance().getIntlMessage("NODE-VALIDATION-DISPLAY-TITLE-TIMEOUT", "Timeout")}`,
+      "message": `${Utilities.getInstance().getIntlMessage("NODE-VALIDATION-MESSAGE-INVALID-TIMEOUT", "Timeout time is invalid.")}`
+    });
   }
-  
+
   if (!data.oAuth2CredsUUID || data.oAuth2CredsUUID.length < 5) {
     bReturn = false;
-    msgReturn = msgReturn.concat({ "field": "oAuth2CredsUUID", "displayTitle": "oAuth Credentials", "message": `missing or invalid  oAuth Credentials` });
+    msgReturn = msgReturn.concat({
+      "field": "oAuth2CredsUUID",
+      "displayTitle": `${Utilities.getInstance().getIntlMessage("NODE-VALIDATION-DISPLAY-TITLE-OAUTH2-CREDENTIALS", "oAuth Credentials")}`,
+      "message": `${Utilities.getInstance().getIntlMessage("NODE-VALIDATION-MESSAGE-OAUTH-CREDENTIALS", "Missing or invalid oAuth Credentials")}`
+    });
+
   }
   return { "isValid": bReturn, "messages": msgReturn };
 };
 
-const publish = (/* flow, nodeData */) => {
-  return new Promise((resolve) => {
-    //custom code here 
-    // if (1 === 2) {
-    //   reject();
-    // }
-    resolve();
-  });
-};
+// uncomment only if you need publish and unpublish ... make sure you return the new node in resolve 
+// const publish = (/* flow, nodeData */) => {
+//   return new Promise((resolve) => {
+//     //custom code here 
+//     // if (1 === 2) {
+//     //   reject();
+//     // }
+//     resolve();
+//   });
+// };
 
-const unPublish = (/* flow, nodeData */) => {
-  return new Promise((resolve) => {
-    //custom code here 
-    // if ('x' === "y") {
-    //   reject();
-    // }
-    resolve();
-  });
-};
+// const unPublish = (/* flow, nodeData */) => {
+//   return new Promise((resolve) => {
+//     //custom code here 
+//     // if ('x' === "y") {
+//     //   reject();
+//     // }
+//     resolve();
+//   });
+// };
 
-const needsToken = () =>{
+const needsToken = () => {
   return NEEDS_TOKEN;
 };
 
@@ -527,6 +560,8 @@ export default {
     });
   },
 
+  "needsToken": needsToken,
+
   "defaultFormData": defaultFormData,
 
   "definitions": definitions,
@@ -534,8 +569,6 @@ export default {
   "nodeInfo": nodeInfo,
 
   "isValid": isValid,
-
-  "needsToken": needsToken, 
 
   "generateWorkflow": (data) => {
     let TransitionCounter = 0;
@@ -574,7 +607,7 @@ export default {
     return { states: [].concat(newState), transitions: [].concat(newTransition) };
   },
 
-  "generateJSXNode": (flow, node, index, position, nodeAction, clickAction, moveAction, canvasSize, showErrorDetails) => {
+  "generateJSXNode": (flow, node, index, position, nodeAction, clickAction, moveAction, canvasSize, showErrorDetails, isPublishedApplication) => {
     // console.log('generateJSXNode ', node);
     return (
       <Group key={node.uuid}
@@ -717,7 +750,7 @@ export default {
             strokeWidth={1}
           />
         </Group>
-        {renderErrorArea(isValid(node.formData, flow.nodes), "AlertIconSVG", node, nodeAction, showErrorDetails)}
+        {!isPublishedApplication ? renderErrorArea(isValid(node.formData, flow.nodes), "AlertIconSVG", node, nodeAction, showErrorDetails) : undefined}
       </Group>
     );
   },
@@ -821,23 +854,23 @@ export default {
     return Utilities.getInstance().getIntlMessage("CONFIRMATION-NODE-HEADER-TITLE", "Edit Confirmation Node");
   },
 
-  "getHeaderMenuOptions": () => {
-    return [{ "svg": "DeleteIconSVG", "title": Utilities.getInstance().getIntlMessage("FLOW-FORM-DELETE-BUTTON", "Delete") }];
+  "getHeaderMenuOptions": (handleUpdate, isPublishedApplication) => {
+    return isPublishedApplication ? [] : [{ "svg": "DeleteIconSVG", "title": Utilities.getInstance().getIntlMessage("FLOW-FORM-DELETE-BUTTON", "Delete") }];
   },
 
-  "getTabs": (data, errors, callback) => {
+  "getTabs": (data, errors, callback, isAppPublished) => {
     return [{
       "tabDisplayName": Utilities.getInstance().getIntlMessage("END-NODE-TAB-DISPLAY-NAME-CONFIG", "Config"),
-      "tabFunc": getConfigTab(data, errors, callback)
+      "tabFunc": getConfigTab(data, errors, callback, isAppPublished)
     },
     {
       "tabDisplayName": Utilities.getInstance().getIntlMessage("CONFIRMATION-NODE-TAB-DISPLAY-NAME-OUTPUT", "Connections"),
-      "tabFunc": getOutputTab(data, errors, callback)
+      "tabFunc": getOutputTab(data, errors, callback, isAppPublished)
     }];
-  },
+  } /* add in only if you have a publish and unpublish need for this component ,
   "publish": publish,
 
-  "unPublish": unPublish,
+  "unPublish": unPublish, */
 };
 
 //////////////////////////////////
